@@ -1,10 +1,19 @@
 ﻿using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 
 namespace EmployeeCvManager
 {
@@ -17,7 +26,10 @@ namespace EmployeeCvManager
 
             services.Insert(0, ServiceDescriptor.Singleton(
                 typeof(IConfigureOptions<AntiforgeryOptions>), 
-                new ConfigureOptions<AntiforgeryOptions>(options => options.CookieName = "<choose a name>")));
+                new ConfigureOptions<AntiforgeryOptions>(options => options.CookieName = "EmployeeCvManager")));
+
+            services.AddAuthentication(
+                options => options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -26,12 +38,116 @@ namespace EmployeeCvManager
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
             loggerFactory.AddConsole();
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                LoginPath = new PathString("/login"),
+                LogoutPath = new PathString("/logout")
+            });
+
+            OAuthOptions GitHubOptions = new OAuthOptions
+            {
+                AuthenticationScheme = "GitHub",
+                DisplayName = "GitHub",
+                ClientId = "4a2055529074e7200c3f",
+                ClientSecret = "be16879ef5d3ca066610e5c35e8278dbf3f62e8f",
+                CallbackPath = new PathString("/signin-github"),
+                AuthorizationEndpoint = "https://github.com/login/oauth/authorize",
+                TokenEndpoint = "https://github.com/login/oauth/access_token",
+                UserInformationEndpoint = "https://api.github.com/user",
+                ClaimsIssuer = "OAuth2-Github",
+                //SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme,
+                //AutomaticChallenge = true,
+
+                // Retrieving user information is unique to each provider.
+                Events = new OAuthEvents
+                {
+                    OnCreatingTicket = async context => { await CreatingGitHubAuthTicket(context); }
+                }
+            };
+
+            app.UseOAuthAuthentication(GitHubOptions);
+
+            app.Map("/login", builder =>
+            {
+                builder.Run(async context =>
+                {
+                    // Return a challenge to invoke the LinkedIn authentication scheme
+                    await context.Authentication.ChallengeAsync("GitHub", properties: new AuthenticationProperties() { RedirectUri = "/" });
+                });
+            });
+
+            // Listen for requests on the /logout path, and sign the user out
+            app.Map("/logout", builder =>
+            {
+                builder.Run(async context =>
+                {
+                    // Sign the user out of the authentication middleware (i.e. it will clear the Auth cookie)
+                    await context.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    // Redirect the user to the home page after signing out
+                    context.Response.Redirect("/");
+                });
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private static async Task CreatingGitHubAuthTicket(OAuthCreatingTicketContext context)
+        {
+            // Get the GitHub user
+            var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
+            response.EnsureSuccessStatusCode();
+
+            var user = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+            AddClaims(context, user);
+        }
+
+        private static void AddClaims(OAuthCreatingTicketContext context, JObject user)
+        {
+            var identifier = user.Value<string>("id");
+            if (!string.IsNullOrEmpty(identifier))
+            {
+                context.Identity.AddClaim(new Claim(
+                    ClaimTypes.NameIdentifier, identifier,
+                    ClaimValueTypes.String, context.Options.ClaimsIssuer));
+            }
+
+            var userName = user.Value<string>("login");
+            if (!string.IsNullOrEmpty(userName))
+            {
+                context.Identity.AddClaim(new Claim(
+                    ClaimsIdentity.DefaultNameClaimType, userName,
+                    ClaimValueTypes.String, context.Options.ClaimsIssuer));
+            }
+
+            var name = user.Value<string>("name");
+            if (!string.IsNullOrEmpty(name))
+            {
+                context.Identity.AddClaim(new Claim(
+                    "urn:github:name", name,
+                    ClaimValueTypes.String, context.Options.ClaimsIssuer));
+            }
+
+            var link = user.Value<string>("url");
+            if (!string.IsNullOrEmpty(link))
+            {
+                context.Identity.AddClaim(new Claim(
+                    "urn:github:url", link,
+                    ClaimValueTypes.String, context.Options.ClaimsIssuer));
+            }
         }
 
         public static void Main(string[] args)
