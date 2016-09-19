@@ -51,8 +51,8 @@ namespace EmployeeCvManager
             {
                 AuthenticationScheme = "GitHub",
                 DisplayName = "GitHub",
-                ClientId = "4a2055529074e7200c3f",
-                ClientSecret = "be16879ef5d3ca066610e5c35e8278dbf3f62e8f",
+                ClientId = "",
+                ClientSecret = "",
                 CallbackPath = new PathString("/signin-github"),
                 AuthorizationEndpoint = "https://github.com/login/oauth/authorize",
                 TokenEndpoint = "https://github.com/login/oauth/access_token",
