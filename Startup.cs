@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using EmployeeCvManager.Helpers;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -29,13 +30,13 @@ namespace EmployeeCvManager
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-                if(env.IsDevelopment())
-                {
-                    builder.AddUserSecrets();
-                }
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets();
+            }
 
-                builder.AddEnvironmentVariables();
-                Configuration = builder.Build();
+            builder.AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -43,9 +44,10 @@ namespace EmployeeCvManager
         {
             services.AddOptions();
             services.AddMvc();
-
+            var frontendConfigSection = Configuration.GetSection("Frontend");
+            services.AddSingleton<FrontendScriptsHelper>(new FrontendScriptsHelper(frontendConfigSection["BundleDefinition"]));
             services.Insert(0, ServiceDescriptor.Singleton(
-                typeof(IConfigureOptions<AntiforgeryOptions>), 
+                typeof(IConfigureOptions<AntiforgeryOptions>),
                 new ConfigureOptions<AntiforgeryOptions>(options => options.CookieName = "EmployeeCvManager")));
 
             services.AddMemoryCache();

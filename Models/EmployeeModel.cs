@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace EmployeeCvManager.Models.Employee
+namespace EmployeeCvManager.Models
 {
     public class EmployeeModel
     {

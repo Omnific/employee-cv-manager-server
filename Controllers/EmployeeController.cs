@@ -1,6 +1,6 @@
 using System;
 using EmployeeCvManager.Helpers;
-using EmployeeCvManager.Models.Employee;
+using EmployeeCvManager.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;

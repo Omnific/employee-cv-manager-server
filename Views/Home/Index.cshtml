@@ -1,15 +1,20 @@
+@model EmployeeCVManager.Models.HomeModel
+
 <!doctype html>
 <html lang="en">
 <head>
   <title>Employee C.V. Manager</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
   <div id="root" style="height: 100%"></div>
-  <script type="text/javascript" src="/vendor.0fda61fd3faa08ac9d70.js"></script>
-  <script type="text/javascript" src="/app.0fda61fd3faa08ac9d70.js"></script>
+  <environment names="Development">
+    <script type="text/javascript" src="http://localhost:3000/vendor.js"></script>
+    <script type="text/javascript" src="http://localhost:3000/app.js"></script>
+  </environment>
+  <environment names="Staging,Production">
+    @Model.ScriptString
+  </environment>
 </body>
 </html>
