@@ -113,12 +113,7 @@ namespace EmployeeCvManager
                 });
             });
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvc();
         }
 
         private static async Task CreatingGitHubAuthTicket(OAuthCreatingTicketContext context)
