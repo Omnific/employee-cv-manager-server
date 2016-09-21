@@ -44,7 +44,7 @@ namespace EmployeeCvManager
         {
             services.AddOptions();
             services.AddMvc();
-            var frontendConfigSection = Configuration.GetSection("Frontend").GetSection("AzureWebPackageDeploy");
+            var frontendConfigSection = Configuration.GetSection("AzureWebPackageDeploy").GetSection("Definition");
             services.AddSingleton<FrontendScriptsHelper>(new FrontendScriptsHelper(frontendConfigSection["Main"]));
             services.Insert(0, ServiceDescriptor.Singleton(
                 typeof(IConfigureOptions<AntiforgeryOptions>),
