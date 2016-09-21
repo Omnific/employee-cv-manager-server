@@ -44,8 +44,8 @@ namespace EmployeeCvManager
         {
             services.AddOptions();
             services.AddMvc();
-            var frontendConfigSection = Configuration.GetSection("Frontend");
-            services.AddSingleton<FrontendScriptsHelper>(new FrontendScriptsHelper(frontendConfigSection["BundleDefinition"]));
+            var frontendConfigSection = Configuration.GetSection("Frontend").GetSection("AzureWebPackageDeploy");
+            services.AddSingleton<FrontendScriptsHelper>(new FrontendScriptsHelper(frontendConfigSection["Main"]));
             services.Insert(0, ServiceDescriptor.Singleton(
                 typeof(IConfigureOptions<AntiforgeryOptions>),
                 new ConfigureOptions<AntiforgeryOptions>(options => options.CookieName = "EmployeeCvManager")));
