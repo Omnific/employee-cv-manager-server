@@ -24,9 +24,11 @@ namespace EmployeeCvManager
     public class Startup
     {
         private IConfiguration Configuration { get; set; }
+        private IHostingEnvironment Environment { get; set; }
 
         public Startup(IHostingEnvironment env)
         {
+            Environment = env;
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -47,7 +49,7 @@ namespace EmployeeCvManager
             services.AddOptions();
             services.AddMvc();
             var frontendConfigSection = Configuration.GetSection("AzureWebPackageDeploy").GetSection("Definition");
-            services.AddSingleton<FrontendScriptsHelper>(new FrontendScriptsHelper(frontendConfigSection["Main"]));
+            services.AddSingleton<FrontendScriptsHelper>(new FrontendScriptsHelper(frontendConfigSection["Main"], Environment.IsDevelopment()));
             services.Insert(0, ServiceDescriptor.Singleton(
                 typeof(IConfigureOptions<AntiforgeryOptions>),
                 new ConfigureOptions<AntiforgeryOptions>(options => options.CookieName = "EmployeeCvManager")));
