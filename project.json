@@ -18,8 +18,11 @@
     "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0-*",
     "Microsoft.AspNetCore.Server.Kestrel": "1.0.0-*",
     "Microsoft.AspNetCore.StaticFiles": "1.0.0-*",
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0-*",
     "Microsoft.Extensions.Configuration.Json": "1.0.0-*",
-    "Microsoft.Extensions.Logging.Console": "1.0.0-*"
+    "Microsoft.Extensions.Logging.Console": "1.0.0-*",
+    "Microsoft.Extensions.Caching.Abstractions": "1.0.0",
+    "Microsoft.Extensions.Caching.Memory": "1.0.0"
   },
   "publishOptions": {
     "include": [
@@ -27,6 +30,10 @@
       "web.config",
       "wwwroot"
     ]
+  },
+  "userSecretsId": "aspnet-WebApp1-cd7da31d-913a-44d6-83f5-5b59e29680e8",
+  "tools": {
+    "Microsoft.Extensions.SecretManager.Tools": "1.0.0-preview2-final"
   },
   "frameworks": {
     "netcoreapp1.0": {

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -19,14 +20,35 @@ namespace EmployeeCvManager
 {
     public class Startup
     {
+        private IConfiguration Configuration { get; set; }
+
+        public Startup(IHostingEnvironment env)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+                if(env.IsDevelopment())
+                {
+                    builder.AddUserSecrets();
+                }
+
+                builder.AddEnvironmentVariables();
+                Configuration = builder.Build();
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
             services.AddMvc();
 
             services.Insert(0, ServiceDescriptor.Singleton(
                 typeof(IConfigureOptions<AntiforgeryOptions>), 
                 new ConfigureOptions<AntiforgeryOptions>(options => options.CookieName = "EmployeeCvManager")));
+
+            services.AddMemoryCache();
 
             services.AddAuthentication(
                 options => options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
@@ -47,19 +69,18 @@ namespace EmployeeCvManager
                 LogoutPath = new PathString("/logout")
             });
 
+            var githubOptions = Configuration.GetSection("Auth").GetSection("Github");
             OAuthOptions GitHubOptions = new OAuthOptions
             {
                 AuthenticationScheme = "GitHub",
                 DisplayName = "GitHub",
-                ClientId = "",
-                ClientSecret = "",
+                ClientId = githubOptions["ClientId"],
+                ClientSecret = githubOptions["ClientSecret"],
                 CallbackPath = new PathString("/signin-github"),
                 AuthorizationEndpoint = "https://github.com/login/oauth/authorize",
                 TokenEndpoint = "https://github.com/login/oauth/access_token",
                 UserInformationEndpoint = "https://api.github.com/user",
                 ClaimsIssuer = "OAuth2-Github",
-                //SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme,
-                //AutomaticChallenge = true,
 
                 // Retrieving user information is unique to each provider.
                 Events = new OAuthEvents
@@ -92,12 +113,7 @@ namespace EmployeeCvManager
                 });
             });
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvc();
         }
 
         private static async Task CreatingGitHubAuthTicket(OAuthCreatingTicketContext context)
