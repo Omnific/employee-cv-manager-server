@@ -58,8 +58,9 @@ namespace EmployeeCvManager
 
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
-                builder.AllowAnyOrigin()
+                builder.WithOrigins("http://localhost:3000")
                     .AllowAnyMethod()
+                    .AllowCredentials()
                     .AllowAnyHeader();
             }));
 
