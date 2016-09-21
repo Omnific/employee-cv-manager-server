@@ -49,7 +49,7 @@ namespace EmployeeCvManager.Controllers
         }
         
         [HttpPost]
-        public IActionResult Post(EmployeeModel model)
+        public IActionResult Post([FromBody]EmployeeModel model)
         {
             if (EmployeeHelper.CreateEmployee(_memoryCache, model))
             {
@@ -62,7 +62,7 @@ namespace EmployeeCvManager.Controllers
         }
         
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, EmployeeModel model)
+        public IActionResult Put(Guid id, [FromBody]EmployeeModel model)
         {
             if (EmployeeHelper.UpdateEmployee(_memoryCache, id, model))
             {

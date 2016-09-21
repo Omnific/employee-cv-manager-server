@@ -44,7 +44,7 @@ namespace EmployeeCvManager.Helpers
             var existingEmployee = employees.FirstOrDefault(e => e.Id == id);
             if (existingEmployee != null)
             {
-                existingEmployee = employee;
+                employees[employees.IndexOf(existingEmployee)] = employee;
                 memoryCache.Set("employee-list", employees);
                 return true;
             }
