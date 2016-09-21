@@ -68,6 +68,7 @@
 -r:"C:\Users\Kevin-PC\.nuget\packages\Microsoft.Extensions.Configuration.EnvironmentVariables\1.0.0\lib\netstandard1.3\Microsoft.Extensions.Configuration.EnvironmentVariables.dll"
 -r:"C:\Users\Kevin-PC\.nuget\packages\Microsoft.Extensions.Configuration.FileExtensions\1.0.0\lib\netstandard1.3\Microsoft.Extensions.Configuration.FileExtensions.dll"
 -r:"C:\Users\Kevin-PC\.nuget\packages\Microsoft.Extensions.Configuration.Json\1.0.0\lib\netstandard1.3\Microsoft.Extensions.Configuration.Json.dll"
+-r:"C:\Users\Kevin-PC\.nuget\packages\Microsoft.Extensions.Configuration.UserSecrets\1.0.0\lib\netstandard1.3\Microsoft.Extensions.Configuration.UserSecrets.dll"
 -r:"C:\Users\Kevin-PC\.nuget\packages\Microsoft.Extensions.DependencyInjection\1.0.0\lib\netstandard1.1\Microsoft.Extensions.DependencyInjection.dll"
 -r:"C:\Users\Kevin-PC\.nuget\packages\Microsoft.Extensions.DependencyInjection.Abstractions\1.0.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll"
 -r:"C:\Users\Kevin-PC\.nuget\packages\Microsoft.Extensions.DependencyModel\1.0.0\lib\netstandard1.6\Microsoft.Extensions.DependencyModel.dll"
@@ -188,4 +189,8 @@
 -r:"C:\Users\Kevin-PC\.nuget\packages\System.Xml.XDocument\4.0.11\ref\netstandard1.3\System.Xml.XDocument.dll"
 -resource:"h:\dev\employee-cv-manager-server\obj\Debug\netcoreapp1.0\employee-cv-manager-serverdotnet-compile.deps.json",employee-cv-manager-server.deps.json
 "h:\dev\employee-cv-manager-server\Startup.cs"
+"h:\dev\employee-cv-manager-server\Controllers\EmployeeController.cs"
 "h:\dev\employee-cv-manager-server\Controllers\HomeController.cs"
+"h:\dev\employee-cv-manager-server\Helpers\EmployeeHelper.cs"
+"h:\dev\employee-cv-manager-server\Models\Employee\EmployeeModel.cs"
+"h:\dev\employee-cv-manager-server\Options\GithubOptions.cs"

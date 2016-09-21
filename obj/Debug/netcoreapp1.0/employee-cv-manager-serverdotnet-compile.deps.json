@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0/",
-    "signature": "755cdb2714ea42245ead5345955689423a1f606f"
+    "signature": "9a6d73630bcd8cf8fc3643173bbab7d23a93902c"
   },
   "compilationOptions": {
     "defines": [
@@ -26,8 +26,11 @@
           "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",
           "Microsoft.AspNetCore.Server.Kestrel": "1.0.0",
           "Microsoft.AspNetCore.StaticFiles": "1.0.0",
+          "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
           "Microsoft.Extensions.Configuration.Json": "1.0.0",
-          "Microsoft.Extensions.Logging.Console": "1.0.0"
+          "Microsoft.Extensions.Logging.Console": "1.0.0",
+          "Microsoft.Extensions.Caching.Abstractions": "1.0.0",
+          "Microsoft.Extensions.Caching.Memory": "1.0.0"
         },
         "compile": {
           "employee-cv-manager-server.dll": {}
@@ -773,6 +776,14 @@
         },
         "compile": {
           "lib/netstandard1.3/Microsoft.Extensions.Configuration.Json.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Configuration.UserSecrets/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Json": "1.0.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/Microsoft.Extensions.Configuration.UserSecrets.dll": {}
         }
       },
       "Microsoft.Extensions.DependencyInjection/1.0.0": {
@@ -2563,8 +2574,11 @@
           "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",
           "Microsoft.AspNetCore.Server.Kestrel": "1.0.0",
           "Microsoft.AspNetCore.StaticFiles": "1.0.0",
+          "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
           "Microsoft.Extensions.Configuration.Json": "1.0.0",
-          "Microsoft.Extensions.Logging.Console": "1.0.0"
+          "Microsoft.Extensions.Logging.Console": "1.0.0",
+          "Microsoft.Extensions.Caching.Abstractions": "1.0.0",
+          "Microsoft.Extensions.Caching.Memory": "1.0.0"
         },
         "runtime": {
           "employee-cv-manager-server.dll": {}
@@ -3313,6 +3327,14 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.Extensions.Configuration.Json.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Configuration.UserSecrets/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Json": "1.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.Extensions.Configuration.UserSecrets.dll": {}
         }
       },
       "Microsoft.Extensions.DependencyInjection/1.0.0": {
@@ -5285,6 +5307,11 @@
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-KRyEOe5/Xi3qyDMdEVh++e2pQRsI6C3wzINVExOcu9lOsFmXK/k4qOf244fyo59rnn6s5xKnIW3WbhxWS1hu2w=="
+    },
+    "Microsoft.Extensions.Configuration.UserSecrets/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2d4ycB89yzoDR40kfoK7iSCrW67mExz4RLm84JFDcgOoMYr1K4vgWjfL2YUjXqjKVNBi6USwhIDkCKXRYWLQ2Q=="
     },
     "Microsoft.Extensions.DependencyInjection/1.0.0": {
       "type": "package",
