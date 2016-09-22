@@ -41,10 +41,10 @@ namespace EmployeeCvManager.Helpers
         public static bool UpdateEmployee(IMemoryCache memoryCache, Guid id, EmployeeModel employee)
         {
             var employees = GetEmployees(memoryCache);
-            var existingEmployee = employees.FirstOrDefault(e => e.Id == id);
-            if (existingEmployee != null)
+            var existingEmployeeIndex = employees.ToList().FindIndex(e => e.Id == id);
+            if (existingEmployeeIndex >= 0)
             {
-                existingEmployee = employee;
+                employees[existingEmployeeIndex] = employee;
                 memoryCache.Set("employee-list", employees);
                 return true;
             }
